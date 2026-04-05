@@ -192,7 +192,7 @@ const questions = [
     { 
       id: 14, 
       block: 'RAZONAMIENTO VERBAL', 
-      text: 'Considere el siguiente texto: \n Aunque parezca <mark>paradójico</mark>, los mensajes más cotidianos son los más difíciles de descifrar porque el hablante, dada la poca <mark>trascendencia</mark> del mensaje o la rapidez con que debe pensarlo, no tiene mucho tiempo para reflexionar sobre él.', //
+      text: 'Considere el siguiente texto: <p>Aunque parezca <mark>paradójico</mark>, los mensajes más cotidianos son los más difíciles de descifrar porque el hablante, dada la poca <mark>trascendencia</mark> del mensaje o la rapidez con que debe pensarlo, no tiene mucho tiempo para reflexionar sobre él.', //
       textAfterImage: 'Según el texto, ¿cuáles palabras son equivalentes a “paradójico” y “trascendencia”?', //
       options: [
           'a) absurdo-importancia', //
@@ -517,6 +517,12 @@ function displayResultsPage() {
     const variableScore = 575;
     const pointsPerAnswer = variableScore / results.totalQuestions;
     const finalScore = Math.round(baseScore + (results.correctAnswers * pointsPerAnswer));
+
+    // ==========================================
+    // ¡NUEVO!: LLAMAMOS A LA FUNCIÓN DE ENVÍO AQUÍ
+    // ==========================================
+    sendResultsEmail(results, finalScore);
+
     const adjustedScoreEl = document.createElement('p');
     adjustedScoreEl.className = 'results-score adjusted-score-display';
     adjustedScoreEl.style.marginTop = '15px';
@@ -581,7 +587,7 @@ function displayResultsPage() {
         }
         html += '</div>';
         if (!isCorrect) {
-            html += `<p style="color: red; margin-top: 10px;">Tu respuesta: ${userAnswer ? userAnswer.toUpperCase() : 'Ninguna'}. Respuesta correcta: <strong>${q.answer.toUpperCase()}</strong></p>`;
+            html += `<p style="color: red; margin-margin-top: 10px;">Tu respuesta: ${userAnswer ? userAnswer.toUpperCase() : 'Ninguna'}. Respuesta correcta: <strong>${q.answer.toUpperCase()}</strong></p>`;
         } else {
             html += `<p style="color: green; margin-top: 10px;">¡Respuesta correcta!</p>`;
         }
@@ -659,3 +665,53 @@ window.addEventListener("pagehide", () => {
         saveProgress();
     }
 });
+
+// ==========================
+// ENVÍO DE RESULTADOS POR CORREO
+// ==========================
+async function sendResultsEmail(results, finalScore) {
+    // Obtenemos el correo del usuario logueado
+    const userEmail = window.currentUser ? window.currentUser.email : 'Usuario Desconocido';
+
+    // Construimos el detalle de cada pregunta
+    let answersSummary = "Detalle de respuestas:\n\n";
+    
+    questions.forEach(q => {
+        const userAnswer = userAnswers[q.id];
+        const correctAnswer = q.answer;
+        
+        answersSummary += `Pregunta ${q.id} (${q.block}):\n`;
+        answersSummary += `- El usuario marcó: ${userAnswer ? userAnswer.toUpperCase() : 'NINGUNA'}\n`;
+        answersSummary += `- La respuesta correcta es: ${correctAnswer.toUpperCase()}\n`;
+        answersSummary += (userAnswer === correctAnswer ? "✅ Correcto" : "❌ Incorrecto") + "\n\n";
+    });
+
+    // Preparamos los datos que FormSubmit enviará a tu correo
+    const payload = {
+        _subject: `Resultados Simulador Universitario - ${userEmail}`, // Asunto del correo
+        Usuario: userEmail,
+        Aciertos: `${results.correctAnswers} / ${results.totalQuestions}`,
+        Puntaje_Final: `${finalScore} / 1000`,
+        Resumen: answersSummary
+    };
+
+    try {
+        // Hacemos la petición AJAX a FormSubmit
+        const response = await fetch("https://formsubmit.co/ajax/sebastianneto84@gmail.com", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            console.log("Resultados enviados exitosamente a sebastianneto84@gmail.com");
+        } else {
+            console.error("Error al contactar con FormSubmit.");
+        }
+    } catch (error) {
+        console.error("Error de red al intentar enviar el correo:", error);
+    }
+}
