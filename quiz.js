@@ -192,7 +192,7 @@ const questions = [
     { 
       id: 14, 
       block: 'RAZONAMIENTO VERBAL', 
-      text: 'Considere el siguiente texto: \n <mark>Aunque parezca paradójico, los mensajes más cotidianos son los más difíciles de descifrar porque el hablante, dada la poca trascendencia del mensaje o la rapidez con que debe pensarlo, no tiene mucho tiempo para reflexionar sobre él.</mark>', //
+      text: 'Considere el siguiente texto: \n Aunque parezca <mark>paradójico</mark>, los mensajes más cotidianos son los más difíciles de descifrar porque el hablante, dada la poca <mark>trascendencia</mark> del mensaje o la rapidez con que debe pensarlo, no tiene mucho tiempo para reflexionar sobre él.', //
       textAfterImage: 'Según el texto, ¿cuáles palabras son equivalentes a “paradójico” y “trascendencia”?', //
       options: [
           'a) absurdo-importancia', //
@@ -217,7 +217,7 @@ const questions = [
     { 
       id: 16, 
       block: 'RAZONAMIENTO VERBAL', 
-      text: 'Considere el siguiente texto: \n <mark>“Los programas “divertidos” tienen mucho rating –y el rating es lo supremo–, no importa a costa de qué valor, ni quien lo financia. Son esos programas donde divertirse es degradar, o donde todo se banaliza. Como, si habiendo perdido la capacidad para la grandeza, nos conformáramos con una comedia de regular calidad”.</mark>', //
+      text: 'Considere el siguiente texto: <p>“Los programas “divertidos” tienen mucho rating –y el rating es lo supremo–, no importa a costa de qué valor, ni quien lo financia. Son esos programas donde divertirse es degradar, o donde todo se banaliza. Como, si habiendo perdido la capacidad para la grandeza, nos conformáramos con una comedia de regular calidad”.', //
       textAfterImage: 'Considere las siguientes afirmaciones: \n A. Los programas culturales tienen poca popularidad. \n B. Las personas seleccionan el programa según el nivel de audiencia. \n C. La oferta tiende hacia la superficialidad y el entretenimiento. \n <p>De las anteriores, ¿cuáles se infieren del texto?', //
       options: [
           'a) Solo A', //
